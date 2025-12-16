@@ -7,5 +7,6 @@ import { defineConfig } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://kingson4wu.github.io',
+	base: '/en/',
 	integrations: [mdx(), sitemap()],
 });
