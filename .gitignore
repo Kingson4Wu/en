@@ -1,10 +1,9 @@
-# build output
-dist/
-# generated types
-.astro/
-
 # dependencies
 node_modules/
+
+# build output
+dist/
+.astro/
 
 # logs
 npm-debug.log*
@@ -12,13 +11,60 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
 # environment variables
 .env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
 .env.production
+
+# IDE and editor files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
 
 # macOS-specific files
 .DS_Store
 
-# jetbrains setting folder
+# Linux-specific files
+.directory
+
+# Windows-specific files
+Thumbs.db
+ehthumbs.db
+Icon?
+[*] Desktop.ini
+
+# Browser extensions
+extension/
+
+# JetBrains IDE
 .idea/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# OS generated files
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local server cache
+.cache
