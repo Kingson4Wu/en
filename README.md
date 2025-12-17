@@ -40,6 +40,8 @@ Any static assets, like images, can be placed in the `public/` directory.
 
 All commands are run from the root of the project, from a terminal:
 
+### Standard Commands
+
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
 | `npm install`             | Installs dependencies                            |
@@ -50,6 +52,29 @@ All commands are run from the root of the project, from a terminal:
 | `npm run build-and-deploy`| Run build and deploy in sequence                 |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+### Convenience Scripts
+
+We've added helper scripts in the `scripts/` directory for common tasks:
+
+| Command                         | Action                                           |
+| :------------------------------ | :----------------------------------------------- |
+| `./scripts/dev.sh`              | Start the local development server               |
+| `./scripts/build-and-publish.sh`| Build and deploy the site in one command         |
+| `./scripts/create.sh "Title"`   | Create a new blog post with title and template   |
+
+To use the convenience scripts, simply run them from the project root:
+
+```bash
+# Start development server
+./scripts/dev.sh
+
+# Build and publish to GitHub Pages
+./scripts/build-and-publish.sh
+
+# Create a new blog post
+./scripts/create.sh "My New Blog Post Title"
+```
 
 ## 📝 Creating New Blog Posts
 
