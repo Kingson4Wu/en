@@ -1,17 +1,19 @@
 
 ---
-title: 'Nondeterminism in LLM Inference: From Floating-Point Arithmetic to Engineering Implementation'
-description: 'Why LLM inference produces different outputs with temperature=0: exploring how batch-variant operators in inference engines introduce nondeterminism through floating-point arithmetic, and how batch-invariant implementations achieve bitwise reproducibility for reinforcement learning.'
+title: 'Why Temperature-0 LLM Inference Still Isn’t Deterministic'
+description: 'A practical look at why identical prompts can diverge under temperature=0, how batch-variant kernels create that behavior, and why batch-invariant operators matter for RL and reproducible experiments.'
 pubDate: 'Dec 17 2025'
 updatedDate: 'Dec 17 2025'  # Optional
 ---
 
 
-## The Problem
+I used to think `temperature=0` meant "the model will always give the same answer." In practice, that is often false once you run inference at scale.
 
-Why do large language models produce different outputs for identical inputs even when `temperature=0`? This counterintuitive phenomenon reveals the engineering trade-offs modern inference engines make in pursuit of extreme performance.
+If the prompt, weights, and decoding strategy are identical, where does the variation come from? The short answer is that a model forward pass may be mathematically "the same" while the inference engine still executes different numerical paths under different loads.
 
-## The Root Cause
+This post is about that gap between the mental model and the implementation reality. The interesting part is not "floating point is weird" by itself, but how throughput-oriented inference systems turn tiny numerical differences into visibly different outputs.
+
+## Where the Nondeterminism Comes From
 
 ### Non-Associativity of Floating-Point Operations
 
@@ -30,7 +32,7 @@ Order 2: x + (y + z)
        = 1
 ```
 
-### Parallel Computation Alters Operation Order
+### Parallel Execution Changes the Order of Operations
 
 To maximize efficiency, GPU parallel computation splits sequential calculations into multiple parallel paths and then merges results. Different parallelization strategies mean different addition tree structures, leading to different floating-point rounding paths.
 
@@ -56,9 +58,11 @@ Then: (t1+t2) + (t3+t4)
 
 While mathematically equivalent, the topology of the addition tree is completely different, resulting in different floating-point accumulation errors.
 
-## The Batch-Variant Problem
+For a single scalar value, these differences are tiny. For token generation, they can still matter because later steps amplify them.
 
-### Dynamic Optimization in Inference Engines
+## The Real Engineering Problem: Batch-Variant Kernels
+
+### Inference Engines Optimize for Throughput, Not Reproducibility
 
 Modern inference engines (e.g., vLLM, TensorRT) dynamically select parallelization strategies based on current load to achieve maximum GPU utilization:
 
@@ -68,9 +72,11 @@ Modern inference engines (e.g., vLLM, TensorRT) dynamically select parallelizati
 | Large batches | Complex parallel kernels |
 | Mixed workloads | Dynamic kernel switching |
 
-This means **the same input takes different computational paths under different loads**.
+The result is simple: **the same request can take different computational paths depending on what else the system is doing**.
 
-### Batch-Variant Characteristics of Key Operators
+That is a very sensible systems choice if your goal is throughput. It is much less sensible if you assumed "`temperature=0` means bitwise stability."
+
+### Operators Where This Shows Up Most Clearly
 
 Three operators most prone to nondeterminism:
 
@@ -78,9 +84,9 @@ Three operators most prone to nondeterminism:
 2. **MatMul**: Large-scale matrix multiplication accumulation order is highly sensitive
 3. **Attention**: The exp-sum-normalize chain in softmax is a hotspot for numerical instability
 
-## argmax: The Amplifier of Tiny Errors
+## Why `argmax` Turns Tiny Errors Into Different Tokens
 
-### What is argmax
+### What `argmax` Actually Does
 
 argmax returns not the maximum value itself, but **the position of the maximum value**.
 
@@ -93,25 +99,25 @@ logits = [4.999998, 4.999999, 3.2]
 argmax(logits) = 1  # Returns token at index 1
 ```
 
-### Why So Fragile
+### Why This Is So Fragile
 
 argmax is a **cliff-edge mapping from continuous to discrete**:
 
 - Before argmax: numerical changes are smooth
 - After argmax: results are binary (black or white)
 
-Therefore, a 0.000001 numerical error can lead to:
+So a 0.000001 numerical difference can lead to:
 - 100% different token selection
 - Completely different subsequent generation paths
 - Total divergence of generated text
 
-This is why `temperature=0` is actually the most unstable—it relies entirely on the fragile "blade" of argmax.
+This is also why `temperature=0` can be surprisingly brittle. Once you rely on a hard `argmax` boundary, "almost the same logits" is no longer "almost the same output."
 
-## The Solution: Batch-Invariant Operators
+## One Fix: Batch-Invariant Operators
 
 ### Core Idea
 
-Not eliminating parallelism, but **keeping the reduction structure consistent across any batch size**.
+The goal is not to remove parallelism. The goal is to **keep the reduction structure stable across batch sizes and runtime conditions**.
 
 ### Implementation Approach
 
@@ -119,20 +125,20 @@ Not eliminating parallelism, but **keeping the reduction structure consistent ac
 2. **Disable automatic kernel switching**: Explicitly specify computation paths; prevent engine from dynamically selecting based on load
 3. **Unified normalization order**: Force fixed computation order in attention and softmax
 
-### Trade-offs
+### Trade-Offs
 
 - ✅ Achieves complete determinism (bitwise identical results)
 - ❌ Sacrifices some GPU throughput and dynamic optimization capability
 
-### Experimental Validation
+### What the Reported Results Look Like
 
 On Qwen3-235B model:
 - **Before fix**: Same prompt produces 80 different outputs across 1000 inferences
 - **After fix**: 1000 inferences produce identical output
 
-## Critical Impact on Reinforcement Learning
+## Why This Matters So Much for Reinforcement Learning
 
-### On-Policy vs Off-Policy
+### On-Policy Assumptions Can Quietly Break
 
 In reinforcement learning, on-policy requires:
 ```
@@ -145,11 +151,11 @@ But due to inference nondeterminism:
 - Resulting in `π_sample ≠ π_train`
 - Becomes **pseudo off-policy**
 
-### KL Divergence Verification
+### KL Divergence as a Sanity Check
 
 After adopting batch-invariant operators, KL divergence during training remains at 0, proving complete consistency between sampling and training. This is nearly impossible in traditional LLM reinforcement learning.
 
-## Engineering Status and Outlook
+## Where This Fits in Practice
 
 ### Current State
 
@@ -157,15 +163,15 @@ After adopting batch-invariant operators, KL divergence during training remains 
 - ✅ Validated on 235B-scale models
 - ❌ Not yet integrated into mainstream inference engines (vLLM, TensorRT)
 
-### Why Not Yet Adopted
+### Why This Is Not the Default Everywhere
 
 1. **Performance cost**: Fixed computation paths mean abandoning dynamic optimization
 2. **Priority mismatch**: Most applications use `temperature>0`, which already allows randomness
 3. **Design philosophy conflict**: Mainstream engines prioritize throughput over determinism
 
-### Understanding the Scope of the Solution
+### What This Solves, and What It Does Not
 
-This approach is easily misunderstood as a "permanent reproducibility" solution, but it actually addresses **local temporal consistency**.
+It is easy to overstate this approach as a universal reproducibility fix. It is not. What it gives you is **consistency inside a fixed deployment environment and time window**.
 
 **What it does NOT guarantee**:
 - Cross-version reproducibility (model weights, tokenizers will update)
@@ -181,7 +187,7 @@ By analogy, this is more like **database transaction isolation levels** rather t
 
 Why not record the complete computation path? Because recording every kernel, every block/warp, every floating-point rounding point on a 235B model is infeasible in terms of storage, replay, and performance. The approach chosen is **structural constraints to guarantee path equivalence**—the only engineering-viable route.
 
-### True Application Scenarios
+### Where This Is Actually Useful
 
 The core value of this solution lies in **consistency within the same time window**:
 
@@ -191,7 +197,7 @@ The core value of this solution lies in **consistency within the same time windo
 
 3. **Security Auditing**: Within the audit period, identical inputs must produce identical outputs to support behavior tracing.
 
-### Future Form
+### What I Expect to Happen
 
 More likely to appear as an **optional mode** in inference engines:
 ```bash
@@ -202,9 +208,9 @@ vllm serve --rl-training-mode
 
 Similar to PyTorch's `torch.use_deterministic_algorithms(True)`, allowing users to choose between performance and determinism.
 
-## Temperature and Randomness
+## Temperature Is Not the Same Thing as Randomness
 
-### The Role of Temperature
+### What Temperature Actually Changes
 
 Temperature doesn't directly control "whether it's random" but rather **adjusts the steepness of the probability distribution**:
 
@@ -219,22 +225,22 @@ p_i = exp(z_i / T) / Σ exp(z_j / T)
 | 2 | [0.41, 0.32, 0.27] | More smooth |
 | 5 | [0.36, 0.33, 0.31] | Near-uniform distribution |
 
-### Key Distinction
+### The Important Distinction
 
 - **Temperature**: Changes probability distribution
 - **Sampling**: Rolls the dice according to probability distribution
 
 `temperature>0` doesn't mean "will be random"—only when combined with sampling does it truly introduce randomness.
 
-## Summary
+## Closing Thought
 
-The nondeterminism problem in LLM inference reveals a profound engineering truth:
+The main lesson here is not merely that floating-point math is non-associative. It is that modern inference stacks intentionally trade numerical path stability for performance, and most of the time that is the right trade.
 
-> **A single forward pass is deterministic, but inference engines use different numerical computation paths under different loads for performance reasons.**
+> **A model can be "deterministic in principle" while the serving system around it is not deterministic in practice.**
 
-The solution isn't eliminating parallelism but **freezing the parallel structure** to keep the numerical path consistent in all cases. This is a clear engineering trade-off—exchanging some performance for complete determinism.
+Batch-invariant operators are one way to narrow that gap. They do not make history replayable forever, but they can remove a meaningful source of system noise in places where consistency matters more than raw throughput.
 
-This solution is currently best suited for scenarios with extreme determinism requirements, particularly reinforcement learning training. It represents a new engineering perspective: sometimes, "slow but stable" is more valuable than "fast but erratic."
+That makes them especially interesting for reinforcement learning, reproducible experiments, and auditing workflows. In those settings, "slower but stable" is often a better engineering choice than "faster but numerically slippery."
 
 ---
 
