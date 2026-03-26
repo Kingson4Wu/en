@@ -1,42 +1,97 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const createBlogUrl = (postId) => `/en/blog/${postId}/`;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			section {
+				padding: 2em 0;
+			}
+			.page-title {
+				font-size: 10px;
+				color: var(--muted);
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				margin-bottom: 1.5em;
+			}
+			ul {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			ul li {
+				padding-bottom: 1.5em;
+				margin-bottom: 1.5em;
+				border-bottom: 1px solid var(--border);
+			}
+			ul li:last-child {
+				border-bottom: none;
+			}
+			ul li a {
+				display: block;
+				text-decoration: none;
+			}
+			.post-meta {
+				font-size: 10px;
+				color: var(--muted);
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				margin-bottom: 0.4em;
+			}
+			.title {
+				font-family: 'Lora', Georgia, serif;
+				font-size: 1.1em;
+				font-weight: 700;
+				color: var(--heading);
+				line-height: 1.35;
+				margin: 0 0 0.4em;
+			}
+			.description {
+				font-size: 0.9em;
+				color: var(--text-muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+			ul li a:hover .title {
+				color: var(--text-muted);
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>Welcome to Kingson Wu's Technical Blog</h1>
-			<p>
-				Hello! I'm Kingson Wu, a senior software engineer exploring advanced topics in software architecture,
-				distributed systems, large language models, and modern development practices.
-				This blog is dedicated to sharing deep technical insights and practical experiences.
-			</p>
-			<p>
-				Here you'll find in-depth articles on topics such as:
-			</p>
-			<ul>
-				<li>Large Language Models (LLMs) and AI systems</li>
-				<li>Distributed systems and microservices architecture</li>
-				<li>Network protocols and infrastructure</li>
-				<li>Generative AI and multimodal systems</li>
-				<li>Modern programming methodologies</li>
-				<li>RPC systems and service communication</li>
-			</ul>
-			<p>
-				Each post aims to bridge the gap between theoretical concepts and real-world applications,
-				providing both analysis and practical implementation guidance.
-			</p>
-			<p>
-				Feel free to browse through my articles, and don't hesitate to reach out if you have questions or suggestions.
-			</p>
+			<section>
+				<p class="page-title">Writing</p>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<a href={createBlogUrl(post.id)}>
+									<p class="post-meta"><FormattedDate date={post.data.pubDate} /></p>
+									<h2 class="title">{post.data.title}</h2>
+									{post.data.description && (
+										<p class="description">{post.data.description}</p>
+									)}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
 		</main>
 		<Footer />
 	</body>

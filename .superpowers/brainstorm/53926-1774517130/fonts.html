@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Font Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #e8e5e0; font-family: -apple-system, sans-serif; padding: 24px; }
+.label { font-size: 11px; color: #78716c; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.frame {
+  background: #f8f7f5; max-width: 680px; margin: 0 auto 28px;
+  border-radius: 10px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+  cursor: pointer; border: 3px solid transparent; transition: border-color 0.15s;
+}
+.frame.selected { border-color: #a8a29e; }
+.frame-label {
+  background: #d6d0c8; color: #5c5448; font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 7px 20px; display: flex; justify-content: space-between; align-items: center;
+}
+.check { color: #a8a29e; font-size: 14px; display: none; }
+.frame.selected .check { display: inline; }
+
+.nav { background: #f8f7f5; padding: 0 24px; border-bottom: 1px solid #e8e5e0; display: flex; align-items: center; justify-content: space-between; height: 48px; }
+.nav-link { font-size: 12px; color: #a8a29e; text-decoration: none; letter-spacing: 0.04em; }
+.content { padding: 22px 24px; }
+.meta { font-size: 10px; color: #a8a29e; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; font-family: -apple-system, sans-serif; }
+.divider { width: 28px; height: 2px; background: #c8c3bb; margin: 14px 0; }
+</style>
+<script>
+function pick(el) {
+  document.querySelectorAll('.frame').forEach(f => f.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</head>
+<body>
+
+<div class="label" style="text-align:center;max-width:680px;margin:0 auto 20px;">字体组合选择</div>
+
+<!-- A: Georgia 标题 + 系统字体正文 (当前推荐) -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">A · Georgia 标题 + 系统字体正文（推荐）</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="nav">
+    <span style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#1c1917;">Kingson Wu</span>
+    <span class="nav-link">Blog · About</span>
+  </div>
+  <div class="content">
+    <p class="meta">March 2025 · 8 min read</p>
+    <h2 style="font-family:Georgia,serif;font-size:20px;color:#1c1917;font-weight:700;line-height:1.3;margin-bottom:6px;letter-spacing:-0.01em;">Why Rust Requires Explicit Lifetime Annotations</h2>
+    <p style="font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;font-size:13px;color:#78716c;line-height:1.6;margin-bottom:0;">From caller contracts to design essence.</p>
+    <div class="divider"></div>
+    <p style="font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;font-size:15px;color:#3c3530;line-height:1.8;">Rust's lifetime annotation system is often cited as one of the steepest parts of the learning curve. Yet once you understand <em>why</em> it exists, it becomes one of the language's most elegant features.</p>
+  </div>
+</div>
+
+<!-- B: Lora 全文（衬线到底） -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">B · Lora 全文衬线（书本感最强）</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="nav">
+    <span style="font-family:'Lora',Georgia,serif;font-size:14px;font-weight:700;color:#1c1917;">Kingson Wu</span>
+    <span class="nav-link">Blog · About</span>
+  </div>
+  <div class="content">
+    <p class="meta">March 2025 · 8 min read</p>
+    <h2 style="font-family:'Lora',Georgia,serif;font-size:20px;color:#1c1917;font-weight:700;line-height:1.3;margin-bottom:6px;">Why Rust Requires Explicit Lifetime Annotations</h2>
+    <p style="font-family:'Lora',Georgia,serif;font-size:13px;color:#78716c;line-height:1.6;margin-bottom:0;font-style:italic;">From caller contracts to design essence.</p>
+    <div class="divider"></div>
+    <p style="font-family:'Lora',Georgia,serif;font-size:15px;color:#3c3530;line-height:1.85;">Rust's lifetime annotation system is often cited as one of the steepest parts of the learning curve. Yet once you understand <em>why</em> it exists, it becomes one of the language's most elegant features.</p>
+  </div>
+</div>
+
+<!-- C: Source Serif 4 标题 + 系统字体正文 -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">C · Source Serif 4 标题 + 系统字体正文（现代衬线）</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="nav">
+    <span style="font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-weight:700;color:#1c1917;">Kingson Wu</span>
+    <span class="nav-link">Blog · About</span>
+  </div>
+  <div class="content">
+    <p class="meta">March 2025 · 8 min read</p>
+    <h2 style="font-family:'Source Serif 4',Georgia,serif;font-size:20px;color:#1c1917;font-weight:700;line-height:1.3;margin-bottom:6px;letter-spacing:-0.01em;">Why Rust Requires Explicit Lifetime Annotations</h2>
+    <p style="font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;font-size:13px;color:#78716c;line-height:1.6;margin-bottom:0;">From caller contracts to design essence.</p>
+    <div class="divider"></div>
+    <p style="font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;font-size:15px;color:#3c3530;line-height:1.8;">Rust's lifetime annotation system is often cited as one of the steepest parts of the learning curve. Yet once you understand <em>why</em> it exists, it becomes one of the language's most elegant features.</p>
+  </div>
+</div>
+
+<!-- D: 全系统字体（最现代） -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">D · 全系统字体（最简洁现代）</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="nav">
+    <span style="font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;font-size:14px;font-weight:700;color:#1c1917;letter-spacing:-0.02em;">Kingson Wu</span>
+    <span class="nav-link">Blog · About</span>
+  </div>
+  <div class="content">
+    <p class="meta">March 2025 · 8 min read</p>
+    <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;font-size:20px;color:#1c1917;font-weight:700;line-height:1.3;margin-bottom:6px;letter-spacing:-0.03em;">Why Rust Requires Explicit Lifetime Annotations</h2>
+    <p style="font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;font-size:13px;color:#78716c;line-height:1.6;margin-bottom:0;">From caller contracts to design essence.</p>
+    <div class="divider"></div>
+    <p style="font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;font-size:15px;color:#3c3530;line-height:1.8;">Rust's lifetime annotation system is often cited as one of the steepest parts of the learning curve. Yet once you understand <em>why</em> it exists, it becomes one of the language's most elegant features.</p>
+  </div>
+</div>
+
+<!-- E: Crimson Pro 全文 -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">E · Crimson Pro 全文（优雅学术感）</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="nav">
+    <span style="font-family:'Crimson Pro',Georgia,serif;font-size:15px;font-weight:700;color:#1c1917;">Kingson Wu</span>
+    <span class="nav-link">Blog · About</span>
+  </div>
+  <div class="content">
+    <p class="meta">March 2025 · 8 min read</p>
+    <h2 style="font-family:'Crimson Pro',Georgia,serif;font-size:22px;color:#1c1917;font-weight:700;line-height:1.25;margin-bottom:6px;">Why Rust Requires Explicit Lifetime Annotations</h2>
+    <p style="font-family:'Crimson Pro',Georgia,serif;font-size:14px;color:#78716c;line-height:1.6;margin-bottom:0;font-style:italic;">From caller contracts to design essence.</p>
+    <div class="divider"></div>
+    <p style="font-family:'Crimson Pro',Georgia,serif;font-size:17px;color:#3c3530;line-height:1.85;">Rust's lifetime annotation system is often cited as one of the steepest parts of the learning curve. Yet once you understand <em>why</em> it exists, it becomes one of the language's most elegant features.</p>
+  </div>
+</div>
+
+</body>
+</html>

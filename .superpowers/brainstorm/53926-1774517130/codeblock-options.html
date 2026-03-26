@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Code Block Options</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #e8e5e0; font-family: -apple-system, sans-serif; padding: 24px; }
+
+.label { font-size: 11px; color: #78716c; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+
+.frame {
+  background: #f8f7f5;
+  max-width: 680px;
+  margin: 0 auto 28px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color 0.15s;
+}
+.frame.selected { border-color: #a8a29e; }
+.frame-label {
+  background: #d6d0c8;
+  color: #5c5448;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 7px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.frame-label .check { color: #a8a29e; font-size: 14px; display: none; }
+.frame.selected .frame-label .check { display: inline; }
+.body-text {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  color: #3c3530;
+  line-height: 1.8;
+  padding: 20px 24px 4px;
+}
+.inline-code {
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 12.5px;
+  background: #eeeae4;
+  color: #44403c;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+</style>
+<script>
+function pick(el) {
+  document.querySelectorAll('.frame').forEach(f => f.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</head>
+<body>
+
+<div class="label" style="text-align:center;max-width:680px;margin:0 auto 20px;">代码块风格选择 — 点选你喜欢的</div>
+
+<!-- Option 1: Soft Dark (original, refined) -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">① 深色 · 精致版</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="body-text">
+    The annotation <span class="inline-code">'a</span> says: the output lives at least as long as the shorter of the two inputs.
+  </div>
+  <div style="margin:12px 24px 20px;">
+    <div style="background:#292524;border-radius:8px;overflow:hidden;">
+      <div style="background:#211e1c;padding:8px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #3c3530;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#44403c;"></div>
+        <div style="width:10px;height:10px;border-radius:50%;background:#44403c;"></div>
+        <div style="width:10px;height:10px;border-radius:50%;background:#44403c;"></div>
+        <span style="font-family:'SF Mono',monospace;font-size:10px;color:#78716c;margin-left:6px;">rust</span>
+      </div>
+      <pre style="padding:16px 20px;font-family:'SF Mono',Menlo,monospace;font-size:12.5px;color:#d6d0c8;line-height:1.75;overflow-x:auto;background:transparent;"><code>fn longest<span style="color:#a8a29e;">&lt;'a&gt;</span>(x: &amp;<span style="color:#a8a29e;">'a</span> str, y: &amp;<span style="color:#a8a29e;">'a</span> str) -&gt; &amp;<span style="color:#a8a29e;">'a</span> str {
+    if x.len() &gt; y.len() { x } else { y }
+}</code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- Option 2: Light / Paper -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">② 浅色 · 纸感</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="body-text">
+    The annotation <span class="inline-code">'a</span> says: the output lives at least as long as the shorter of the two inputs.
+  </div>
+  <div style="margin:12px 24px 20px;">
+    <div style="background:#eeeae4;border-radius:8px;border:1px solid #ddd8d0;overflow:hidden;">
+      <div style="background:#e5e0d8;padding:7px 16px;border-bottom:1px solid #ddd8d0;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'SF Mono',monospace;font-size:10px;color:#a8a29e;letter-spacing:0.04em;">rust</span>
+      </div>
+      <pre style="padding:16px 20px;font-family:'SF Mono',Menlo,monospace;font-size:12.5px;color:#3c3530;line-height:1.75;overflow-x:auto;background:transparent;"><code>fn longest<span style="color:#8a7a6a;">&lt;'a&gt;</span>(x: &amp;<span style="color:#8a7a6a;">'a</span> str, y: &amp;<span style="color:#8a7a6a;">'a</span> str) -&gt; &amp;<span style="color:#8a7a6a;">'a</span> str {
+    if x.len() &gt; y.len() { x } else { y }
+}</code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- Option 3: Bordered Minimal -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">③ 左边线 · 极简</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="body-text">
+    The annotation <span class="inline-code">'a</span> says: the output lives at least as long as the shorter of the two inputs.
+  </div>
+  <div style="margin:12px 24px 20px;">
+    <div style="border-left:3px solid #a8a29e;background:#f0ece6;border-radius:0 6px 6px 0;overflow:hidden;">
+      <pre style="padding:14px 20px;font-family:'SF Mono',Menlo,monospace;font-size:12.5px;color:#3c3530;line-height:1.75;overflow-x:auto;"><code>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+    if x.len() &gt; y.len() { x } else { y }
+}</code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- Option 4: Dark with glow accent -->
+<p class="label" style="max-width:680px;margin:0 auto 6px;">④ 深色 · 高对比</p>
+<div class="frame" onclick="pick(this)">
+  <div class="frame-label">选这个 <span class="check">✓</span></div>
+  <div class="body-text">
+    The annotation <span class="inline-code">'a</span> says: the output lives at least as long as the shorter of the two inputs.
+  </div>
+  <div style="margin:12px 24px 20px;">
+    <div style="background:#1c1917;border-radius:8px;overflow:hidden;">
+      <div style="padding:8px 16px 8px;border-bottom:1px solid #292524;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'SF Mono',monospace;font-size:10px;color:#57534e;letter-spacing:0.06em;text-transform:uppercase;">rust</span>
+        <span style="font-size:10px;color:#57534e;font-family:-apple-system,sans-serif;">copy</span>
+      </div>
+      <pre style="padding:18px 20px;font-family:'SF Mono',Menlo,monospace;font-size:12.5px;color:#e7e5e4;line-height:1.8;overflow-x:auto;background:transparent;"><code><span style="color:#a8a29e;">fn</span> longest<span style="color:#d6d0c8;">&lt;'a&gt;</span>(x: &amp;<span style="color:#d6d0c8;">'a</span> str, y: &amp;<span style="color:#d6d0c8;">'a</span> str) <span style="color:#a8a29e;">-&gt;</span> &amp;<span style="color:#d6d0c8;">'a</span> str {
+    <span style="color:#a8a29e;">if</span> x.len() &gt; y.len() { x } <span style="color:#a8a29e;">else</span> { y }
+}</code></pre>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

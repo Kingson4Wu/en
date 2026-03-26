@@ -1,0 +1,157 @@
+<h2>配色方案选择</h2>
+<p class="subtitle">同一排版，不同色调 — 点选你喜欢的，可多选</p>
+
+<div class="cards" data-multiselect>
+
+  <!-- P1: Cream Classic -->
+  <div class="card" data-choice="cream-classic" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#fdfaf4;padding:12px 18px;border-bottom:1px solid #ede8dc;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:Georgia,serif;font-size:13px;font-weight:700;color:#2c1e10;">Kingson's Notes</span>
+        <span style="font-size:10px;color:#b8a48c;font-family:-apple-system,sans-serif;">Archive · About</span>
+      </div>
+      <div style="background:#fdfaf4;padding:16px 18px;">
+        <p style="font-size:9px;color:#c8a87a;margin:0 0 4px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Mar 2025</p>
+        <p style="font-family:Georgia,serif;font-size:13px;color:#2c1e10;margin:0 0 4px;font-weight:700;line-height:1.35;">Why Rust Requires Explicit Lifetime Annotations</p>
+        <p style="font-family:Georgia,serif;font-size:11px;color:#8a6e54;line-height:1.6;margin:0 0 10px;">From caller contracts to design essence.</p>
+        <div style="border-top:1px solid #ede8dc;padding-top:10px;">
+          <p style="font-size:9px;color:#c8a87a;margin:0 0 3px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Feb 2025</p>
+          <p style="font-family:Georgia,serif;font-size:13px;color:#2c1e10;margin:0;">LLM Inference Nondeterminism</p>
+        </div>
+      </div>
+      <!-- Color swatches -->
+      <div style="display:flex;gap:0;height:8px;">
+        <div style="flex:1;background:#fdfaf4;"></div>
+        <div style="flex:1;background:#ede8dc;"></div>
+        <div style="flex:1;background:#c8a87a;"></div>
+        <div style="flex:1;background:#8a6e54;"></div>
+        <div style="flex:1;background:#2c1e10;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>① 奶油棕 · Cream Classic</h3>
+      <p>米白底 + 暖棕文字，像书页的颜色，最自然舒适</p>
+    </div>
+  </div>
+
+  <!-- P2: Stone & Slate -->
+  <div class="card" data-choice="stone-slate" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#f8f7f5;padding:12px 18px;border-bottom:1px solid #e8e5e0;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:Georgia,serif;font-size:13px;font-weight:700;color:#1c1917;">Kingson's Notes</span>
+        <span style="font-size:10px;color:#a8a29e;font-family:-apple-system,sans-serif;">Archive · About</span>
+      </div>
+      <div style="background:#f8f7f5;padding:16px 18px;">
+        <p style="font-size:9px;color:#a8a29e;margin:0 0 4px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Mar 2025</p>
+        <p style="font-family:Georgia,serif;font-size:13px;color:#1c1917;margin:0 0 4px;font-weight:700;line-height:1.35;">Why Rust Requires Explicit Lifetime Annotations</p>
+        <p style="font-family:Georgia,serif;font-size:11px;color:#78716c;line-height:1.6;margin:0 0 10px;">From caller contracts to design essence.</p>
+        <div style="border-top:1px solid #e8e5e0;padding-top:10px;">
+          <p style="font-size:9px;color:#a8a29e;margin:0 0 3px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Feb 2025</p>
+          <p style="font-family:Georgia,serif;font-size:13px;color:#1c1917;margin:0;">LLM Inference Nondeterminism</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:0;height:8px;">
+        <div style="flex:1;background:#f8f7f5;"></div>
+        <div style="flex:1;background:#e8e5e0;"></div>
+        <div style="flex:1;background:#a8a29e;"></div>
+        <div style="flex:1;background:#78716c;"></div>
+        <div style="flex:1;background:#1c1917;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>② 石灰白 · Stone & Slate</h3>
+      <p>暖灰底色，中性偏冷，现代感更强，专业克制</p>
+    </div>
+  </div>
+
+  <!-- P3: Ink on Paper -->
+  <div class="card" data-choice="ink-paper" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#fff;padding:12px 18px;border-bottom:1px solid #f0ebe3;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:Georgia,serif;font-size:13px;font-weight:700;color:#111;">Kingson's Notes</span>
+        <span style="font-size:10px;color:#d4a96a;font-family:-apple-system,sans-serif;">Archive · About</span>
+      </div>
+      <div style="background:#fff;padding:16px 18px;">
+        <p style="font-size:9px;color:#d4a96a;margin:0 0 4px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Mar 2025</p>
+        <p style="font-family:Georgia,serif;font-size:13px;color:#111;margin:0 0 4px;font-weight:700;line-height:1.35;">Why Rust Requires Explicit Lifetime Annotations</p>
+        <p style="font-family:Georgia,serif;font-size:11px;color:#666;line-height:1.6;margin:0 0 10px;">From caller contracts to design essence.</p>
+        <div style="border-top:1px solid #f0ebe3;padding-top:10px;">
+          <p style="font-size:9px;color:#d4a96a;margin:0 0 3px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Feb 2025</p>
+          <p style="font-family:Georgia,serif;font-size:13px;color:#111;margin:0;">LLM Inference Nondeterminism</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:0;height:8px;">
+        <div style="flex:1;background:#fff;"></div>
+        <div style="flex:1;background:#f0ebe3;"></div>
+        <div style="flex:1;background:#d4a96a;"></div>
+        <div style="flex:1;background:#666;"></div>
+        <div style="flex:1;background:#111;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>③ 纸墨 · Ink on Paper</h3>
+      <p>纯白底 + 金色 accent，干净高对比，金色点缀优雅</p>
+    </div>
+  </div>
+
+  <!-- P4: Sage & Warm -->
+  <div class="card" data-choice="sage-warm" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#f7f6f2;padding:12px 18px;border-bottom:1px solid #e4e0d6;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:Georgia,serif;font-size:13px;font-weight:700;color:#2a2520;">Kingson's Notes</span>
+        <span style="font-size:10px;color:#8a9e8c;font-family:-apple-system,sans-serif;">Archive · About</span>
+      </div>
+      <div style="background:#f7f6f2;padding:16px 18px;">
+        <p style="font-size:9px;color:#8a9e8c;margin:0 0 4px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Mar 2025</p>
+        <p style="font-family:Georgia,serif;font-size:13px;color:#2a2520;margin:0 0 4px;font-weight:700;line-height:1.35;">Why Rust Requires Explicit Lifetime Annotations</p>
+        <p style="font-family:Georgia,serif;font-size:11px;color:#7a7060;line-height:1.6;margin:0 0 10px;">From caller contracts to design essence.</p>
+        <div style="border-top:1px solid #e4e0d6;padding-top:10px;">
+          <p style="font-size:9px;color:#8a9e8c;margin:0 0 3px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Feb 2025</p>
+          <p style="font-family:Georgia,serif;font-size:13px;color:#2a2520;margin:0;">LLM Inference Nondeterminism</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:0;height:8px;">
+        <div style="flex:1;background:#f7f6f2;"></div>
+        <div style="flex:1;background:#e4e0d6;"></div>
+        <div style="flex:1;background:#8a9e8c;"></div>
+        <div style="flex:1;background:#7a7060;"></div>
+        <div style="flex:1;background:#2a2520;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>④ 鼠尾草绿 · Sage & Warm</h3>
+      <p>米白底 + 鼠尾草绿 accent，自然、文艺、有质感</p>
+    </div>
+  </div>
+
+  <!-- P5: Dark Warm -->
+  <div class="card" data-choice="dark-warm" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1612;padding:12px 18px;border-bottom:1px solid #2e2820;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:Georgia,serif;font-size:13px;font-weight:700;color:#e8ddd0;">Kingson's Notes</span>
+        <span style="font-size:10px;color:#8a7a6a;font-family:-apple-system,sans-serif;">Archive · About</span>
+      </div>
+      <div style="background:#1a1612;padding:16px 18px;">
+        <p style="font-size:9px;color:#c8a87a;margin:0 0 4px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Mar 2025</p>
+        <p style="font-family:Georgia,serif;font-size:13px;color:#e8ddd0;margin:0 0 4px;font-weight:700;line-height:1.35;">Why Rust Requires Explicit Lifetime Annotations</p>
+        <p style="font-family:Georgia,serif;font-size:11px;color:#9a8a7a;line-height:1.6;margin:0 0 10px;">From caller contracts to design essence.</p>
+        <div style="border-top:1px solid #2e2820;padding-top:10px;">
+          <p style="font-size:9px;color:#c8a87a;margin:0 0 3px;font-family:-apple-system,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">Feb 2025</p>
+          <p style="font-family:Georgia,serif;font-size:13px;color:#e8ddd0;margin:0;">LLM Inference Nondeterminism</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:0;height:8px;">
+        <div style="flex:1;background:#1a1612;"></div>
+        <div style="flex:1;background:#2e2820;"></div>
+        <div style="flex:1;background:#c8a87a;"></div>
+        <div style="flex:1;background:#9a8a7a;"></div>
+        <div style="flex:1;background:#e8ddd0;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>⑤ 深色暖调 · Dark Warm</h3>
+      <p>深棕背景 + 奶油文字，暖色深色模式，夜读感强</p>
+    </div>
+  </div>
+
+</div>

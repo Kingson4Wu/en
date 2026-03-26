@@ -9,4 +9,9 @@ export default defineConfig({
 	site: 'https://kingson4wu.github.io',
 	base: '/en/',
 	integrations: [mdx(), sitemap()],
+	markdown: {
+		shikiConfig: {
+			theme: 'dracula',
+		},
+	},
 });

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Design Preview</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #e8e5e0; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; padding: 24px; }
+
+.label {
+  font-size: 11px;
+  color: #78716c;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-family: -apple-system, sans-serif;
+}
+
+/* ---- PREVIEW FRAME ---- */
+.frame {
+  background: #f8f7f5;
+  max-width: 760px;
+  margin: 0 auto 32px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+}
+.frame-label {
+  background: #d6d0c8;
+  color: #5c5448;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  font-family: -apple-system, sans-serif;
+}
+
+/* ---- HEADER ---- */
+.site-header {
+  background: #f8f7f5;
+  padding: 0 32px;
+  border-bottom: 1px solid #e8e5e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+}
+.site-title {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1c1917;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+.site-nav {
+  display: flex;
+  gap: 20px;
+}
+.site-nav a {
+  font-size: 12px;
+  color: #a8a29e;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.site-nav a.active {
+  color: #1c1917;
+  border-bottom: 1px solid #1c1917;
+  padding-bottom: 1px;
+}
+
+/* ---- BLOG LIST ---- */
+.blog-main {
+  padding: 36px 32px;
+}
+.page-title {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #a8a29e;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.post-item {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e8e5e0;
+}
+.post-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.post-meta {
+  font-size: 10px;
+  color: #a8a29e;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-family: -apple-system, sans-serif;
+}
+.post-title {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: #1c1917;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 6px;
+  text-decoration: none;
+  display: block;
+}
+.post-title:hover { color: #78716c; }
+.post-desc {
+  font-size: 13px;
+  color: #78716c;
+  line-height: 1.6;
+  font-family: -apple-system, sans-serif;
+}
+
+/* ---- ARTICLE PAGE ---- */
+.article-main {
+  padding: 0;
+}
+.article-header {
+  padding: 36px 32px 28px;
+  border-bottom: 1px solid #e8e5e0;
+}
+.article-date {
+  font-size: 10px;
+  color: #a8a29e;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-family: -apple-system, sans-serif;
+}
+.article-title {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  color: #1c1917;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+.article-desc {
+  font-size: 14px;
+  color: #78716c;
+  line-height: 1.6;
+  font-family: -apple-system, sans-serif;
+}
+.article-body {
+  padding: 28px 32px;
+}
+.article-body p {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  color: #3c3530;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.article-body h2 {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  color: #1c1917;
+  font-weight: 700;
+  margin: 24px 0 10px;
+}
+.article-body code {
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 12px;
+  background: #eeeae4;
+  color: #44403c;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.article-body pre {
+  background: #1c1917;
+  color: #d6d0c8;
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 16px 20px;
+  border-radius: 6px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+.accent-line {
+  width: 28px;
+  height: 2px;
+  background: #a8a29e;
+  margin-bottom: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="label" style="text-align:center;margin-bottom:16px;">最终设计预览 — Stone & Slate · Newsletter — 方案 B</div>
+
+<!-- PREVIEW 1: Blog List Page -->
+<p class="label" style="max-width:760px;margin:0 auto 8px;">首页 / 文章列表</p>
+<div class="frame">
+  <div class="site-header">
+    <a class="site-title" href="#">Kingson Wu</a>
+    <nav class="site-nav">
+      <a href="#" class="active">Blog</a>
+      <a href="#">About</a>
+    </nav>
+  </div>
+  <div class="blog-main">
+    <p class="page-title">Writing</p>
+    <div class="post-item">
+      <p class="post-meta">March 2025 · 8 min read</p>
+      <a class="post-title" href="#">Why Rust Requires Explicit Lifetime Annotations</a>
+      <p class="post-desc">From caller contracts to design essence — a deep dive into one of Rust's most misunderstood features.</p>
+    </div>
+    <div class="post-item">
+      <p class="post-meta">February 2025 · 5 min read</p>
+      <a class="post-title" href="#">LLM Inference Nondeterminism</a>
+      <p class="post-desc">Why the same prompt can produce different outputs, and what to do about it.</p>
+    </div>
+    <div class="post-item">
+      <p class="post-meta">January 2025 · 6 min read</p>
+      <a class="post-title" href="#">Produce Different Outputs</a>
+      <p class="post-desc">Exploring the mechanics behind varied generation in large language models.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW 2: Article Page -->
+<p class="label" style="max-width:760px;margin:0 auto 8px;">文章页</p>
+<div class="frame">
+  <div class="site-header">
+    <a class="site-title" href="#">Kingson Wu</a>
+    <nav class="site-nav">
+      <a href="#">Blog</a>
+      <a href="#">About</a>
+    </nav>
+  </div>
+  <div class="article-main">
+    <div class="article-header">
+      <p class="article-date">March 15, 2025</p>
+      <h1 class="article-title">Why Rust Requires Explicit Lifetime Annotations</h1>
+      <p class="article-desc">From caller contracts to design essence — a deep dive into one of Rust's most misunderstood features.</p>
+    </div>
+    <div class="article-body">
+      <div class="accent-line"></div>
+      <p>Rust's lifetime annotation system is often cited as one of the steepest parts of the learning curve. Yet once you understand <em>why</em> it exists, it becomes one of the language's most elegant features.</p>
+      <p>The key insight is that lifetimes are not about telling the compiler how long something lives — the compiler already knows that. They are about expressing <strong>relationships</strong> between lifetimes.</p>
+      <h2>The Core Problem</h2>
+      <p>Consider a function that takes two string slices and returns one of them. The compiler needs to know: how long does the returned reference live? Without annotations, there's no way to express that the output's lifetime is tied to one of the inputs.</p>
+      <pre><code>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+    if x.len() &gt; y.len() { x } else { y }
+}</code></pre>
+      <p>The annotation <code>'a</code> says: the output lives at least as long as the shorter of the two inputs. This is a contract — not an implementation detail, but a promise to the caller.</p>
+    </div>
+  </div>
+</div>
+
+<div style="max-width:760px;margin:0 auto;padding:16px;background:#eeeae4;border-radius:8px;">
+  <p style="font-family:-apple-system,sans-serif;font-size:12px;color:#78716c;margin-bottom:8px;letter-spacing:0.04em;text-transform:uppercase;">改动范围（方案 B）</p>
+  <ul style="font-family:-apple-system,sans-serif;font-size:13px;color:#44403c;line-height:1.8;padding-left:18px;">
+    <li><code style="font-size:11px;background:#e0dbd2;padding:1px 5px;border-radius:3px;">global.css</code> — 配色、字体大小、行高、body 背景</li>
+    <li><code style="font-size:11px;background:#e0dbd2;padding:1px 5px;border-radius:3px;">Header.astro</code> — 导航栏样式</li>
+    <li><code style="font-size:11px;background:#e0dbd2;padding:1px 5px;border-radius:3px;">BlogPost.astro</code> — 文章页标题区布局</li>
+    <li><code style="font-size:11px;background:#e0dbd2;padding:1px 5px;border-radius:3px;">blog/index.astro</code> — 文章列表样式</li>
+    <li><code style="font-size:11px;background:#e0dbd2;padding:1px 5px;border-radius:3px;">index.astro</code> — 首页样式</li>
+  </ul>
+</div>
+
+</body>
+</html>
