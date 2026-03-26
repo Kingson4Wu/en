@@ -12,9 +12,11 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await render(post);
+const wordCount = post.body?.split(/\s+/).filter((w) => w.length > 0).length ?? 0;
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+const { Content, headings } = await render(post);
 ---
 
-<BlogPost {...post.data}>
+<BlogPost {...post.data} readingTime={readingTime} headings={headings}>
 	<Content />
 </BlogPost>

@@ -13,6 +13,20 @@
 	--heading: #1c1917;
 }
 
+[data-theme="dark"] {
+	--bg: #1a1917;
+	--border: #292524;
+	--muted: #57534e;
+	--text: #e7e5e4;
+	--text-muted: #a8a29e;
+	--heading: #fafaf9;
+}
+
+[data-theme="dark"] code {
+	background-color: #292524;
+	color: #d4d0cb;
+}
+
 body {
 	font-family: 'Lora', Georgia, serif;
 	margin: 0;

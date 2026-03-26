@@ -1,0 +1,51 @@
+---
+// Giscus comments — configure after setup at https://giscus.app
+//
+// Setup steps:
+// 1. Enable Discussions on your GitHub repo (Settings → Features → Discussions)
+// 2. Install the Giscus app: https://github.com/apps/giscus
+// 3. Visit https://giscus.app, fill in your repo, copy the values below
+//
+const REPO = 'Kingson4Wu/kingson4wu.github.io'; // e.g. 'kingson4wu/kingson4wu.github.io.en'
+const REPO_ID = 'MDEwOlJlcG9zaXRvcnkzODA2OTA1Njg='; // from giscus.app
+const CATEGORY = 'General';
+const CATEGORY_ID = 'DIC_kwDOFrDgiM4C5V0C'; // from giscus.app
+
+const configured = REPO !== '' && REPO_ID !== '' && CATEGORY_ID !== '';
+---
+
+{configured && <div id="giscus-container" class="giscus-wrapper"></div>}
+
+{configured && (
+	<script is:inline define:vars={{ REPO, REPO_ID, CATEGORY, CATEGORY_ID }}>
+		(() => {
+			const theme = document.documentElement.getAttribute('data-theme') === 'dark'
+				? 'dark_dimmed'
+				: 'light';
+			const script = document.createElement('script');
+			script.src = 'https://giscus.app/client.js';
+			script.setAttribute('data-repo', REPO);
+			script.setAttribute('data-repo-id', REPO_ID);
+			script.setAttribute('data-category', CATEGORY);
+			script.setAttribute('data-category-id', CATEGORY_ID);
+			script.setAttribute('data-mapping', 'pathname');
+			script.setAttribute('data-strict', '0');
+			script.setAttribute('data-reactions-enabled', '1');
+			script.setAttribute('data-emit-metadata', '0');
+			script.setAttribute('data-input-position', 'top');
+			script.setAttribute('data-theme', theme);
+			script.setAttribute('data-lang', 'en');
+			script.async = true;
+			script.crossOrigin = 'anonymous';
+			document.getElementById('giscus-container')?.appendChild(script);
+		})();
+	</script>
+)}
+
+<style>
+	.giscus-wrapper {
+		margin-top: 3em;
+		padding-top: 1.5em;
+		border-top: 1px solid var(--border);
+	}
+</style>

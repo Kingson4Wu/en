@@ -68,3 +68,5 @@ Thumbs.db
 
 # Local server cache
 .cache
+.superpowers
+docs/superpowers

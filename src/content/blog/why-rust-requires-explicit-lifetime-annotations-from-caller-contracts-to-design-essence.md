@@ -3,7 +3,6 @@ title: 'Why Rust Requires Explicit Lifetime Annotations: From Caller Contracts t
 description: 'Description of the blog post - Why Rust Requires Explicit Lifetime Annotations: From Caller Contracts to Design Essence'
 pubDate: 'Dec 23 2025'
 updatedDate: 'Dec 23 2025'  # Optional
-heroImage: '../../assets/Rust_Lifetime.png'
 ---
 
 When learning Rust lifetimes, nearly everyone encounters this reasonable question:

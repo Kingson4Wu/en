@@ -4,11 +4,17 @@ import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import Giscus from '../components/Giscus.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+	readingTime?: number;
+	headings?: { depth: number; slug: string; text: string }[];
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, readingTime, headings } = Astro.props;
+const tocHeadings = (headings ?? []).filter((h) => h.depth <= 3);
+const showToc = tocHeadings.length >= 3;
 ---
 
 <html lang="en">
@@ -51,6 +57,19 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				text-transform: uppercase;
 				letter-spacing: 0.08em;
 				margin-bottom: 0.75em;
+				display: flex;
+				align-items: center;
+				gap: 0.5em;
+			}
+			.reading-time {
+				color: var(--muted);
+				font-size: 10px;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+			}
+			.reading-time::before {
+				content: '·';
+				margin-right: 0.5em;
 			}
 			.description {
 				font-style: italic;
@@ -71,6 +90,91 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				color: var(--muted);
 				margin-top: 0.25em;
 			}
+			/* TOC */
+			.toc {
+				margin-bottom: 2em;
+				padding: 1em 1.25em;
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				font-size: 0.88em;
+			}
+			.toc summary {
+				font-size: 10px;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--muted);
+				cursor: pointer;
+				user-select: none;
+				list-style: none;
+				display: flex;
+				align-items: center;
+				gap: 0.4em;
+			}
+			.toc summary::-webkit-details-marker { display: none; }
+			.toc summary .toc-arrow {
+				transition: transform 0.2s;
+				display: inline-block;
+			}
+			.toc[open] summary .toc-arrow {
+				transform: rotate(90deg);
+			}
+			.toc ol {
+				margin: 0.75em 0 0;
+				padding: 0 0 0 1.25em;
+				list-style: none;
+				counter-reset: toc;
+			}
+			.toc ol li {
+				margin-bottom: 0.35em;
+				line-height: 1.5;
+			}
+			.toc ol li a {
+				color: var(--text-muted);
+				text-decoration: none;
+				font-size: 0.88em;
+			}
+			.toc ol li a:hover {
+				color: var(--heading);
+			}
+			.toc ol li.depth-3 {
+				padding-left: 1em;
+				font-size: 0.9em;
+			}
+			/* Share */
+			.share {
+				margin-top: 3em;
+				padding-top: 1.5em;
+				border-top: 1px solid var(--border);
+				display: flex;
+				align-items: center;
+				gap: 0.75em;
+			}
+			.share-label {
+				font-size: 10px;
+				color: var(--muted);
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				margin-right: 0.25em;
+			}
+			.share-btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.35em;
+				font-size: 12px;
+				color: var(--text-muted);
+				text-decoration: none;
+				padding: 0.35em 0.75em;
+				border: 1px solid var(--border);
+				border-radius: 4px;
+				transition: color 0.15s, border-color 0.15s;
+				cursor: pointer;
+				background: none;
+				font-family: inherit;
+			}
+			.share-btn:hover {
+				color: var(--heading);
+				border-color: var(--muted);
+			}
 		</style>
 	</head>
 
@@ -85,6 +189,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 					<div class="title">
 						<div class="date">
 							<FormattedDate date={pubDate} />
+							{readingTime && <span class="reading-time">{readingTime} min read</span>}
 							{
 								updatedDate && (
 									<div class="last-updated-on">
@@ -97,7 +202,64 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						{description && <p class="description">{description}</p>}
 						<div class="divider"></div>
 					</div>
-					<slot />
+					{showToc && (
+						<details class="toc">
+							<summary>
+								<span class="toc-arrow">▶</span>
+								Contents
+							</summary>
+							<ol>
+								{tocHeadings.map((h) => (
+									<li class={`depth-${h.depth}`}>
+										<a href={`#${h.slug}`}>{h.text}</a>
+									</li>
+								))}
+							</ol>
+						</details>
+					)}
+					<div data-pagefind-body>
+						<slot />
+					</div>
+					<div class="share">
+						<span class="share-label">Share</span>
+						<a
+							class="share-btn"
+							href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(Astro.url.href)}&text=${encodeURIComponent(title)}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							title="Share on X"
+						>
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.91-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+							</svg>
+							X
+						</a>
+						<a
+							class="share-btn"
+							href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							title="Share on LinkedIn"
+						>
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+							</svg>
+							LinkedIn
+						</a>
+						<button
+							class="share-btn"
+							id="copy-link-btn"
+							onclick={`navigator.clipboard.writeText('${Astro.url.href}').then(()=>{const b=document.getElementById('copy-link-btn');b.querySelector('span').textContent='Copied!';setTimeout(()=>b.querySelector('span').textContent='Copy link',1500)})`}
+							title="Copy link"
+						>
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+								<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+							</svg>
+							<span>Copy link</span>
+						</button>
+					</div>
+					<Giscus />
 				</div>
 			</article>
 		</main>
