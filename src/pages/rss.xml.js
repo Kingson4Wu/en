@@ -10,9 +10,10 @@ export async function GET(context) {
 		.map((entry) => ({
 			title:
 				entry.collection === 'notes'
-					? entry.data.title ?? `Note from ${entry.data.pubDate.toISOString().slice(0, 10)}`
+					? entry.data.title ?? 'Untitled note'
 					: entry.data.title,
-			description: entry.data.description ?? SITE_DESCRIPTION,
+			description:
+				entry.collection === 'notes' ? SITE_DESCRIPTION : entry.data.description ?? SITE_DESCRIPTION,
 			pubDate: entry.data.pubDate,
 			link: new URL(
 				`${entry.collection}/${entry.id}/`,
