@@ -3,6 +3,10 @@ title: 'Why Rust Makes Lifetime Annotations Part of the API'
 description: 'Rust lifetime annotations are not just compiler hints. They are part of the function contract, which is why explicit lifetimes matter for callers, traits, and API stability.'
 pubDate: 'Dec 23 2025'
 updatedDate: 'Dec 23 2025'  # Optional
+tags:
+  - rust
+  - lifetimes
+  - language-design
 ---
 
 When people first learn Rust lifetimes, they usually ask a reasonable question:

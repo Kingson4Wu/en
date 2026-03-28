@@ -4,6 +4,10 @@ title: 'Why Temperature-0 LLM Inference Still Isn’t Deterministic'
 description: 'A practical look at why identical prompts can diverge under temperature=0, how batch-variant kernels create that behavior, and why batch-invariant operators matter for RL and reproducible experiments.'
 pubDate: 'Dec 17 2025'
 updatedDate: 'Dec 17 2025'  # Optional
+tags:
+  - llm
+  - inference
+  - systems
 ---
 
 
