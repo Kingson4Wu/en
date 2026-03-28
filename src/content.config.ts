@@ -23,8 +23,7 @@ const notes = defineCollection({
 	// Type-check frontmatter using a schema
 	schema: ({ image }) =>
 		z.object({
-			title: z.string(),
-			description: z.string(),
+			title: z.string().optional(),
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image().optional(),
