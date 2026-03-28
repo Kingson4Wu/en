@@ -1,6 +1,5 @@
 ---
 title: Small decisions shape the interface
-description: A short note on how tiny API decisions accumulate into product feel.
 pubDate: '2026-03-28T12:00:00.000Z'
 ---
 

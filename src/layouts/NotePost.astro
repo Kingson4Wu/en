@@ -2,13 +2,21 @@
 import type { CollectionEntry } from 'astro:content';
 import BlogPost from './BlogPost.astro';
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props as CollectionEntry<'notes'>['data'];
+const { title, pubDate, updatedDate, heroImage } = Astro.props as CollectionEntry<'notes'>['data'];
+const noteDateLabel = pubDate.toLocaleDateString('en-us', {
+	year: 'numeric',
+	month: 'short',
+	day: 'numeric',
+});
+const noteMetaTitle = title ?? `Untitled note · ${noteDateLabel}`;
+const noteMetaDescription = `Note published on ${noteDateLabel}.`;
 ---
 
 <!-- Notes reuse BlogPost, which already wraps rendered content in data-pagefind-body. -->
 <BlogPost
 	title={title}
-	description={description}
+	metaTitle={noteMetaTitle}
+	metaDescription={noteMetaDescription}
 	pubDate={pubDate}
 	updatedDate={updatedDate}
 	heroImage={heroImage}

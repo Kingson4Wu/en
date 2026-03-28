@@ -6,8 +6,13 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Giscus from '../components/Giscus.astro';
 import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-type Props = CollectionEntry<'blog'>['data'] & {
+type Props = Omit<CollectionEntry<'blog'>['data'], 'title' | 'description'> & {
+	title?: string;
+	description?: string;
+	metaTitle?: string;
+	metaDescription?: string;
 	readingTime?: number;
 	headings?: { depth: number; slug: string; text: string }[];
 	showReadingTime?: boolean;
@@ -22,6 +27,8 @@ const {
 	pubDate,
 	updatedDate,
 	heroImage,
+	metaTitle,
+	metaDescription,
 	readingTime,
 	headings,
 	showReadingTime = true,
@@ -31,11 +38,14 @@ const {
 } = Astro.props;
 const tocHeadings = (headings ?? []).filter((h) => h.depth <= 3);
 const shouldShowToc = showToc && tocHeadings.length >= 3;
+const pageTitle = metaTitle ?? title ?? SITE_TITLE;
+const pageDescription = metaDescription ?? description ?? SITE_DESCRIPTION;
+const shouldShowTitleBlock = Boolean(title || description);
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={pageTitle} description={pageDescription} />
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -214,9 +224,13 @@ const shouldShowToc = showToc && tocHeadings.length >= 3;
 								)
 							}
 						</div>
-						<h1>{title}</h1>
-						{description && <p class="description">{description}</p>}
-						<div class="divider"></div>
+						{shouldShowTitleBlock && (
+							<>
+								{title && <h1>{title}</h1>}
+								{description && <p class="description">{description}</p>}
+								<div class="divider"></div>
+							</>
+						)}
 					</div>
 					{shouldShowToc && (
 						<details class="toc">
@@ -241,7 +255,7 @@ const shouldShowToc = showToc && tocHeadings.length >= 3;
 							<span class="share-label">Share</span>
 							<a
 								class="share-btn"
-								href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(Astro.url.href)}&text=${encodeURIComponent(title)}`}
+								href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(Astro.url.href)}&text=${encodeURIComponent(pageTitle)}`}
 								target="_blank"
 								rel="noopener noreferrer"
 								title="Share on X"

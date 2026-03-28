@@ -1,6 +1,5 @@
 ---
 title: Write before the idea feels finished
-description: A note about why partial thinking is still worth publishing.
 pubDate: '2026-03-27T12:00:00.000Z'
 ---
 
