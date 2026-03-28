@@ -11,6 +11,8 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 type Props = Omit<CollectionEntry<'blog'>['data'], 'title' | 'description'> & {
 	title?: string;
 	description?: string;
+	metaTitle?: string;
+	metaDescription?: string;
 	readingTime?: number;
 	headings?: { depth: number; slug: string; text: string }[];
 	showReadingTime?: boolean;
@@ -25,6 +27,8 @@ const {
 	pubDate,
 	updatedDate,
 	heroImage,
+	metaTitle,
+	metaDescription,
 	readingTime,
 	headings,
 	showReadingTime = true,
@@ -34,8 +38,8 @@ const {
 } = Astro.props;
 const tocHeadings = (headings ?? []).filter((h) => h.depth <= 3);
 const shouldShowToc = showToc && tocHeadings.length >= 3;
-const pageTitle = title ?? SITE_TITLE;
-const pageDescription = description ?? SITE_DESCRIPTION;
+const pageTitle = metaTitle ?? title ?? SITE_TITLE;
+const pageDescription = metaDescription ?? description ?? SITE_DESCRIPTION;
 const shouldShowTitleBlock = Boolean(title || description);
 ---
 
