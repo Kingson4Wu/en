@@ -1,10 +1,15 @@
 ---
+import { experimental_AstroContainer } from 'astro/container';
+import { loadRenderers } from 'astro:container';
 import { getCollection, render } from 'astro:content';
+import { getContainerRenderer } from '@astrojs/mdx';
+import { rehype } from 'rehype';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { visit } from 'unist-util-visit';
 
 const notes = (await getCollection('notes')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -13,11 +18,50 @@ const notes = (await getCollection('notes')).sort(
 // With Astro's base set to '/en/', all routes are prefixed with '/en/'
 const createNoteUrl = (noteId) => `/en/notes/${noteId}/`;
 
+const renderers = await loadRenderers([getContainerRenderer()]);
+const container = await experimental_AstroContainer.create({ renderers });
+
+const isRelativeUrl = (value) =>
+	!value.startsWith('/') &&
+	!value.startsWith('#') &&
+	!value.startsWith('//') &&
+	!/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(value);
+
+const rebaseRelativeUrls = async (html, basePath) => {
+	const baseUrl = new URL(basePath, 'https://example.invalid');
+
+	const file = await rehype()
+		.data('settings', { fragment: true })
+			.use(() => (tree) => {
+			visit(tree, 'element', (node) => {
+				for (const attr of ['href', 'src']) {
+					const properties = (node.properties ??= {});
+					const value = properties[attr];
+
+					if (typeof value !== 'string' || !isRelativeUrl(value)) {
+						continue;
+					}
+
+					const rebased = new URL(value, baseUrl);
+					properties[attr] = `${rebased.pathname}${rebased.search}${rebased.hash}`;
+				}
+			});
+		})
+		.process(html);
+
+	return String(file);
+};
+
 const notesWithContent = await Promise.all(
-	notes.map(async (note) => ({
-		note,
-		rendered: await render(note),
-	})),
+	notes.map(async (note) => {
+		const { Content } = await render(note);
+		const html = await container.renderToString(Content);
+
+		return {
+			note,
+			html: rebaseRelativeUrls(html, createNoteUrl(note.id)),
+		};
+	}),
 );
 ---
 
@@ -63,13 +107,20 @@ const notesWithContent = await Promise.all(
 				line-height: 1.35;
 				margin: 0 0 0.8em;
 			}
-			.note-body :global(p) {
+			.note-body {
 				font-size: 0.95em;
 				line-height: 1.75;
-				margin: 0 0 1em;
+				color: var(--text);
 			}
-			.note-body :global(p:last-child) {
+			.note-body :global(:is(p, ul, ol, dl, blockquote, pre, figure, table, hr, h1, h2, h3, h4, h5, h6)) {
+				margin: 0 0 1rem;
+			}
+			.note-body :global(:is(p, ul, ol, dl, blockquote, pre, figure, table, hr, h1, h2, h3, h4, h5, h6):last-child) {
 				margin-bottom: 0;
+			}
+			.note-body :global(pre),
+			.note-body :global(code) {
+				font-size: 0.95em;
 			}
 			.note-link {
 				display: inline-block;
@@ -90,9 +141,8 @@ const notesWithContent = await Promise.all(
 				<p class="page-title">Notes</p>
 				<div class="feed">
 					{
-						notesWithContent.map(({ note, rendered }) => {
+						notesWithContent.map(({ note, html }) => {
 							const noteTitle = note.data.title ?? '';
-							const { Content } = rendered;
 
 							return (
 								<article>
@@ -100,9 +150,7 @@ const notesWithContent = await Promise.all(
 										<FormattedDate date={note.data.pubDate} />
 									</p>
 									{noteTitle && <h2 class="title">{noteTitle}</h2>}
-									<div class="note-body">
-										<Content />
-									</div>
+									<div class="note-body" set:html={html} />
 									<a class="note-link" href={createNoteUrl(note.id)}>
 										Permalink
 									</a>
