@@ -1,18 +1,14 @@
 ---
-import { SITE_DESCRIPTION } from '../consts';
 import type { CollectionEntry } from 'astro:content';
 import BlogPost from './BlogPost.astro';
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props as CollectionEntry<'notes'>['data'];
-
-const noteTitle = title ?? 'Untitled note';
-const noteDescription = description ?? SITE_DESCRIPTION;
 ---
 
 <!-- Notes reuse BlogPost, which already wraps rendered content in data-pagefind-body. -->
 <BlogPost
-	title={noteTitle}
-	description={noteDescription}
+	title={title}
+	description={description}
 	pubDate={pubDate}
 	updatedDate={updatedDate}
 	heroImage={heroImage}
