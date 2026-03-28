@@ -12,15 +12,6 @@ const notes = (await getCollection('notes')).sort(
 
 // With Astro's base set to '/en/', all routes are prefixed with '/en/'
 const createNoteUrl = (noteId) => `/en/notes/${noteId}/`;
-const noteDescriptions = {
-	'Small decisions shape the interface':
-		'A short note on how tiny API decisions accumulate into product feel.',
-	'Write before the idea feels finished':
-		'A note about why partial thinking is still worth publishing.',
-};
-
-const getNoteTitle = (note) => note.data.title ?? 'Untitled note';
-const getNoteDescription = (note) => noteDescriptions[getNoteTitle(note)] ?? SITE_DESCRIPTION;
 ---
 
 <!doctype html>
@@ -92,8 +83,7 @@ const getNoteDescription = (note) => noteDescriptions[getNoteTitle(note)] ?? SIT
 					<li>
 						<a href={createNoteUrl(note.id)}>
 							<p class="note-meta"><FormattedDate date={note.data.pubDate} /></p>
-							<h2 class="title">{getNoteTitle(note)}</h2>
-							<p class="description">{getNoteDescription(note)}</p>
+							{note.data.title && <h2 class="title">{note.data.title}</h2>}
 						</a>
 					</li>
 				))

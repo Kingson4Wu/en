@@ -5,20 +5,14 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 export async function GET(context) {
 	const [posts, notes] = await Promise.all([getCollection('blog'), getCollection('notes')]);
 	const englishSiteURL = new URL(import.meta.env.BASE_URL, context.site);
-	const noteDescriptions = {
-		'Small decisions shape the interface':
-			'A short note on how tiny API decisions accumulate into product feel.',
-		'Write before the idea feels finished':
-			'A note about why partial thinking is still worth publishing.',
-	};
 	const items = [...posts, ...notes]
 		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 		.map((entry) => ({
-			title: entry.data.title ?? 'Untitled note',
-			description:
+			title:
 				entry.collection === 'notes'
-					? noteDescriptions[entry.data.title ?? 'Untitled note'] ?? SITE_DESCRIPTION
-					: entry.data.description,
+					? entry.data.title ?? `Note from ${entry.data.pubDate.toISOString().slice(0, 10)}`
+					: entry.data.title,
+			description: entry.data.description ?? SITE_DESCRIPTION,
 			pubDate: entry.data.pubDate,
 			link: new URL(
 				`${entry.collection}/${entry.id}/`,
