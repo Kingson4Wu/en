@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -12,6 +12,13 @@ const notes = (await getCollection('notes')).sort(
 
 // With Astro's base set to '/en/', all routes are prefixed with '/en/'
 const createNoteUrl = (noteId) => `/en/notes/${noteId}/`;
+
+const notesWithContent = await Promise.all(
+	notes.map(async (note) => ({
+		note,
+		rendered: await render(note),
+	})),
+);
 ---
 
 <!doctype html>
@@ -19,78 +26,93 @@ const createNoteUrl = (noteId) => `/en/notes/${noteId}/`;
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-	section {
-		padding: 2em 0;
-	}
-	.page-title {
-		font-size: 10px;
-		color: var(--muted);
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		margin-bottom: 1.5em;
-	}
-	ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-	ul li {
-		padding-bottom: 1.5em;
-		margin-bottom: 1.5em;
-		border-bottom: 1px solid var(--border);
-	}
-	ul li:last-child {
-		border-bottom: none;
-	}
-	ul li a {
-		display: block;
-		text-decoration: none;
-	}
-	.note-meta {
-		font-size: 10px;
-		color: var(--muted);
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		margin-bottom: 0.4em;
-	}
-	.title {
-		font-family: 'Lora', Georgia, serif;
-		font-size: 1.1em;
-		font-weight: 700;
-		color: var(--heading);
-		line-height: 1.35;
-		margin: 0 0 0.4em;
-	}
-	.description {
-		font-size: 0.9em;
-		color: var(--text-muted);
-		line-height: 1.6;
-		margin: 0;
-	}
-	ul li a:hover .title {
-		color: var(--text-muted);
-	}
-</style>
+			section {
+				padding: 2em 0;
+			}
+			.page-title {
+				font-size: 10px;
+				color: var(--muted);
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				margin-bottom: 1.5em;
+			}
+			.feed {
+				display: grid;
+				gap: 2rem;
+			}
+			article {
+				padding-bottom: 2rem;
+				border-bottom: 1px solid var(--border);
+			}
+			article:last-child {
+				border-bottom: none;
+				padding-bottom: 0;
+			}
+			.note-meta {
+				font-size: 10px;
+				color: var(--muted);
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				margin-bottom: 0.4em;
+			}
+			.title {
+				font-family: 'Lora', Georgia, serif;
+				font-size: 1.1em;
+				font-weight: 700;
+				color: var(--heading);
+				line-height: 1.35;
+				margin: 0 0 0.8em;
+			}
+			.note-body :global(p) {
+				font-size: 0.95em;
+				line-height: 1.75;
+				margin: 0 0 1em;
+			}
+			.note-body :global(p:last-child) {
+				margin-bottom: 0;
+			}
+			.note-link {
+				display: inline-block;
+				margin-top: 1rem;
+				font-size: 0.9em;
+				color: var(--muted);
+				text-decoration: none;
+			}
+			.note-link:hover {
+				color: var(--heading);
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-	<section>
-		<p class="page-title">Notes</p>
-		<ul>
-			{
-				notes.map((note) => (
-					<li>
-						<a href={createNoteUrl(note.id)}>
-							<p class="note-meta"><FormattedDate date={note.data.pubDate} /></p>
-							{note.data.title && <h2 class="title">{note.data.title}</h2>}
-						</a>
-					</li>
-				))
-			}
-		</ul>
-	</section>
-</main>
+			<section>
+				<p class="page-title">Notes</p>
+				<div class="feed">
+					{
+						notesWithContent.map(({ note, rendered }) => {
+							const noteTitle = note.data.title ?? '';
+							const { Content } = rendered;
+
+							return (
+								<article>
+									<p class="note-meta">
+										<FormattedDate date={note.data.pubDate} />
+									</p>
+									{noteTitle && <h2 class="title">{noteTitle}</h2>}
+									<div class="note-body">
+										<Content />
+									</div>
+									<a class="note-link" href={createNoteUrl(note.id)}>
+										Permalink
+									</a>
+								</article>
+							);
+						})
+					}
+				</div>
+			</section>
+		</main>
 		<Footer />
 	</body>
 </html>
