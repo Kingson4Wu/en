@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BlogPost from './BlogPost.astro';
+
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props as CollectionEntry<'notes'>['data'];
+---
+
+<!-- Notes reuse BlogPost, which already wraps rendered content in data-pagefind-body. -->
+<BlogPost
+	title={title}
+	description={description}
+	pubDate={pubDate}
+	updatedDate={updatedDate}
+	heroImage={heroImage}
+	showReadingTime={false}
+	showToc={false}
+	showShare={false}
+	showComments={true}
+>
+	<slot />
+</BlogPost>
