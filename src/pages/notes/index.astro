@@ -21,11 +21,10 @@ const createNoteUrl = (noteId) => `/en/notes/${noteId}/`;
 const renderers = await loadRenderers([getContainerRenderer()]);
 const container = await experimental_AstroContainer.create({ renderers });
 
-const isRelativeUrl = (value) =>
-	!value.startsWith('/') &&
-	!value.startsWith('#') &&
-	!value.startsWith('//') &&
-	!/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(value);
+const isAbsoluteLikeUrl = (value) =>
+	value.startsWith('/') ||
+	value.startsWith('//') ||
+	/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(value);
 
 const rebaseRelativeUrls = async (html, basePath) => {
 	const baseUrl = new URL(basePath, 'https://example.invalid');
@@ -38,7 +37,12 @@ const rebaseRelativeUrls = async (html, basePath) => {
 					const properties = (node.properties ??= {});
 					const value = properties[attr];
 
-					if (typeof value !== 'string' || !isRelativeUrl(value)) {
+					if (typeof value !== 'string' || isAbsoluteLikeUrl(value)) {
+						continue;
+					}
+
+					if (value.startsWith('#')) {
+						properties[attr] = `${basePath}${value}`;
 						continue;
 					}
 
