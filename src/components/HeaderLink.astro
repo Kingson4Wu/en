@@ -13,7 +13,11 @@ const normalizePath = (value: string) => {
 const pathname = normalizePath(Astro.url.pathname);
 const normalizedHref = normalizePath(href?.toString() ?? '/');
 const subpath = pathname.match(/[^\/]+/g);
-const isActive = normalizedHref === pathname || normalizedHref === '/' + (subpath?.[0] || '');
+const isNotesHome = pathname === '/' && normalizedHref === '/notes';
+const isActive =
+	isNotesHome ||
+	normalizedHref === pathname ||
+	normalizedHref === '/' + (subpath?.[0] || '');
 ---
 
 <a href={href} class:list={[className, { active: isActive }]} {...props}>
