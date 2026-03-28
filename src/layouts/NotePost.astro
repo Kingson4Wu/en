@@ -1,120 +1,20 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Giscus from '../components/Giscus.astro';
-import Header from '../components/Header.astro';
+import BlogPost from './BlogPost.astro';
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props as CollectionEntry<'notes'>['data'];
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description ?? title} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 8px;
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 2em 1em;
-				color: var(--text);
-			}
-			.title {
-				margin-bottom: 1.5em;
-				padding: 1.5em 0 0;
-			}
-			.title h1 {
-				font-size: 1.8em;
-				margin: 0 0 0.4em;
-				color: var(--heading);
-				line-height: 1.25;
-			}
-			.date {
-				font-size: 10px;
-				color: var(--muted);
-				text-transform: uppercase;
-				letter-spacing: 0.08em;
-				margin-bottom: 0.75em;
-				display: flex;
-				flex-wrap: wrap;
-				align-items: center;
-				gap: 0.5em;
-			}
-			.last-updated-on {
-				font-style: italic;
-				font-size: 0.85em;
-				color: var(--muted);
-			}
-			.description {
-				font-style: italic;
-				color: var(--text-muted);
-				font-size: 1em;
-				line-height: 1.6;
-				margin-bottom: 1em;
-			}
-			.divider {
-				width: 28px;
-				height: 2px;
-				background: #c8c3bb;
-				margin: 1.25em 0;
-			}
-			.content {
-				line-height: 1.75;
-			}
-			.comments {
-				margin-top: 3em;
-			}
-		</style>
-	</head>
-
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<header class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<span class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</span>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						{description && <p class="description">{description}</p>}
-						<div class="divider"></div>
-					</header>
-					<div class="content" data-pagefind-body>
-						<slot />
-					</div>
-					<div class="comments">
-						<Giscus />
-					</div>
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+<BlogPost
+	title={title}
+	description={description}
+	pubDate={pubDate}
+	updatedDate={updatedDate}
+	heroImage={heroImage}
+	showReadingTime={false}
+	showToc={false}
+	showShare={false}
+	showComments={true}
+>
+	<slot />
+</BlogPost>
